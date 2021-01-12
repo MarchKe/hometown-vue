@@ -63,7 +63,31 @@
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
-    }
+    },
+    handleSubmit (formName) {
+			this.$refs[name].validate((valid) => {
+		        if (valid) {
+		        	let params={
+		        		username : this.formName.user,
+						    password : this.formName.pass
+		        	}
+		      		request.login(this.$api, params, resp => {
+				        if (resp.code == 200) {
+				          	//设置token
+				          	sessionStorage.clear();
+				          	sessionStorage.setItem("token", resp.result.token);
+				          	sessionStorage.setItem("userInfo",JSON.stringify(resp.result.userInfo));
+							//路由跳转
+				          	this.$router.push({
+					            path: "/home"
+							});
+				        } else {
+				          	this.$message.error(resp.message);
+				        }
+			      	})
+			    }
+		    })
+    	}
   }
   }
 </script>
